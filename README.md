@@ -1,2 +1,2 @@
-# blog_tutorial
+# flask_tutorial
 YouTube Flask tutorial by Corey Schafer
