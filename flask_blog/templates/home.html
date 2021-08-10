@@ -23,6 +23,65 @@
       >
     </h2>
     <p class="article-content">{{ post.content | safe }}</p>
+    <div class="collapse" id="comments-{{post.id}}">
+      <div class="card">
+        <div class="card-body" id="comments-expanded-{{post.id}}">
+          {% for comment in post.comments %}
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <a href="/posts/{{comment.author.username}}"
+                >{{comment.author.username}}</a
+              >: {{comment.content}}
+            </div>
+            <div>
+              <small class="text-muted"> {{comment.date_posted}}</small>
+              {% if user.id == comment.user_id or user.id == post.user_id %}
+              <div class="btn-group">
+                <button
+                  type="button"
+                  class="btn btn-sm btn-primary dropdown-toggle"
+                  data-toggle="dropdown"
+                ></button>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a
+                      href="/delete-comment/{{comment.id}}"
+                      class="dropdown-item"
+                      >Delete</a
+                    >
+                  </li>
+                </ul>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <p class="card-text">
+      {% if post.comments|length > 0 %}
+      <a data-toggle="collapse" href="#comments-{{post.id}}" role="button">
+        <small>View {{post.comments|length}} Comments</small>
+      </a>
+      {% else %}
+      <small class="text-muted">No Comments</small>
+      {% endif %}
+    </p>
+    <form
+      class="input-group mb-3"
+      method="POST"
+      action="/create-comment/{{post.id}}"
+    >
+      <input
+        type="text"
+        id="content"
+        name="content"
+        class="form-control"
+        placeholder="Comment something!"
+      />
+      <button type="submit" class="btn btn-primary">Comment</button>
+    </form>
   </div>
 </article>
 {% endfor %} {% for page_num in posts.iter_pages(left_edge=1, right_edge=1,
